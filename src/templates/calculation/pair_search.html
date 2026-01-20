@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h3 class="center-align section-title">{{ title }}</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m8 offset-m2">
+        <div class="card z-depth-4 form-card">
+            <div class="card-content">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="card-panel red lighten-5 red-text text-darken-4">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    {% if search_error %}
+                        <div class="card-panel red lighten-5 red-text text-darken-4">
+                            {{ search_error }}
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="input-field col s6 teacher-field">
+                            <i class="material-icons prefix green-text">date_range</i>
+                            {{ form.start_date }}
+                            <label for="{{ form.start_date.id_for_label }}">Дата начала</label>
+                            {{ form.start_date.errors }}
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix green-text">date_range</i>
+                            {{ form.end_date }}
+                            <label for="{{ form.end_date.id_for_label }}">Дата окончания</label>
+                            {{ form.end_date.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix green-text">person</i>
+                            {{ form.teacher }}
+                            <label for="{{ form.teacher.id_for_label }}">Преподаватель</label>
+                            {{ form.teacher.errors }}
+                            <ul id="teacher-suggestions" class="collection teacher-suggestions"></ul>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix green-text">book</i>
+                            {{ form.subject }}
+                            <label for="{{ form.subject.id_for_label }}">Предмет</label>
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <button type="submit" class="btn-large waves-effect waves-light green-bg">
+                                Найти занятия
+                                <i class="material-icons right">search</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if search_performed %}
+<div class="row">
+    <div class="col s12">
+        <h4 class="center-align">Результаты поиска</h4>
+        <p class="center-align gray-text">Найдено строк: {{ pairs|length }}</p>
+        
+        {% if pairs %}
+        <div class="card">
+            <div class="card-content">
+                <table class="striped highlight">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Часы от и до</th>
+                            <th>Вид выполняемой учебной работы</th>
+                            <th>Курс</th>
+                            <th>Группа</th>
+                            <th>Количество часов</th>
+                            <th>Примечание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pair in pairs %}
+                        <tr>
+                            <td>{{ pair.date|date:"d.m.Y" }}</td>
+                            <td>{{ pair.time_range }}</td>
+                            <td>{{ pair.work_type }}</td>
+                            <td>{{ pair.course }}</td>
+                            <td>{{ pair.group }}</td>
+                            <td>{{ pair.hours }}</td>
+                            <td>{{ pair.notes }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-content center-align">
+                <h5>Занятия не найдены</h5>
+                <p>По вашему запросу не найдено ни одного занятия.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{{ teacher_options|json_script:"teacher-options" }}
+
+<style>
+    .teacher-field {
+        position: relative;
+    }
+    .teacher-suggestions {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        margin-top: 8px;
+        z-index: 10;
+        max-height: 360px;
+        overflow-y: auto;
+    }
+    .teacher-suggestions .collection-item {
+        cursor: pointer;
+    }
+    .form-card {
+        overflow: visible;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const teacherInput = document.getElementById('id_teacher');
+    const minChars = 1;
+    const suggestions = document.getElementById('teacher-suggestions');
+    const dataElement = document.getElementById('teacher-options');
+    if (!teacherInput || !suggestions || !dataElement) {
+        return;
+    }
+
+    let allOptions = [];
+    try {
+        allOptions = JSON.parse(dataElement.textContent);
+    } catch (error) {
+        return;
+    }
+
+    const escapeHtml = (value) => value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const clearSuggestions = () => {
+        suggestions.innerHTML = '';
+        suggestions.style.display = 'none';
+    };
+
+    const updateList = () => {
+        const value = teacherInput.value.trim().toLowerCase();
+        let matches = [];
+        if (value.length === 0) {
+            matches = allOptions;
+        } else if (value.length >= minChars) {
+            matches = allOptions
+                .filter(option => option.toLowerCase().includes(value));
+        }
+        if (matches.length === 0) {
+            clearSuggestions();
+            return;
+        }
+
+        suggestions.innerHTML = matches
+            .map(option => `<li class="collection-item" data-value="${escapeHtml(option)}">${escapeHtml(option)}</li>`)
+            .join('');
+        suggestions.style.display = 'block';
+    };
+
+    suggestions.addEventListener('mousedown', (event) => {
+        const item = event.target.closest('.collection-item');
+        if (!item) {
+            return;
+        }
+        teacherInput.value = item.getAttribute('data-value');
+        clearSuggestions();
+    });
+
+    teacherInput.addEventListener('input', updateList);
+    teacherInput.addEventListener('focus', updateList);
+    teacherInput.addEventListener('blur', () => setTimeout(clearSuggestions, 150));
+});
+</script>
+{% endblock %}

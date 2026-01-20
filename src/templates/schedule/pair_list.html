@@ -1,0 +1,74 @@
+{% extends 'schedule/base.html' %}
+
+{% block schedule_content %}
+<div class="row">
+    <div class="col s12">
+        <table class="striped highlight">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Номер</th>
+                    <th>Дата</th>
+                    <th>Предмет</th>
+                    <th>Текст</th>
+                    <th>Группы</th>
+                    <th>Преподаватели</th>
+                    <th>Аудитории</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pair in object_list %}
+                <tr>
+                    <td>{{ pair.id }}</td>
+                    <td>{{ pair.num }}</td>
+                    <td>{{ pair.date }}</td>
+                    <td>{{ pair.subject }}</td>
+                    <td>{{ pair.text|truncatewords:10 }}</td>
+                    <td>
+                        {% for group in pair.groups.all %}
+                            <span class="chip">{{ group.name }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for teacher in pair.teachers.all %}
+                            <span class="chip">{{ teacher.name }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for audience in pair.audiences.all %}
+                            <span class="chip">{{ audience.name }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="center-align">Нет данных</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+<div class="row">
+    <div class="col s12 center-align">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="waves-effect"><a href="?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+            {% endif %}
+            
+            <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+            
+            {% if page_obj.has_next %}
+                <li class="waves-effect"><a href="?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+                <li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

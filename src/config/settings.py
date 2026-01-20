@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # apps
     'apps.user.apps.UserConfig',
     'apps.schedule.apps.ScheduleConfig',
+    'apps.calculation.apps.CalculationConfig',
 
 ]
 
@@ -96,6 +97,8 @@ DATABASES = {
         }
     }
 }
+
+DATABASE_ROUTERS = ["apps.schedule.db_routers.PgReadOnlyRouter"]
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

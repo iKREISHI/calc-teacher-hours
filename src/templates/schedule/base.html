@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title|default:'Расписание' }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h3 class="center-align section-title">{{ title|default:'Расписание' }}</h3>
+    </div>
+</div>
+
+{% block schedule_content %}
+{% endblock %}
+
+{% endblock %}

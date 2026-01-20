@@ -1,0 +1,52 @@
+{% extends 'schedule/base.html' %}
+
+{% block schedule_content %}
+<div class="row">
+    <div class="col s12">
+        <table class="striped highlight">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Факультет</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in object_list %}
+                <tr>
+                    <td>{{ group.id }}</td>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.faculty.display_name|default:group.faculty.name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="center-align">Нет данных</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+<div class="row">
+    <div class="col s12 center-align">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="waves-effect"><a href="?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+                <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+            {% endif %}
+            
+            <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+            
+            {% if page_obj.has_next %}
+                <li class="waves-effect"><a href="?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+                <li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

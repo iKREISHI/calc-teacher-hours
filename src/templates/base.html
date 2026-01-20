@@ -134,6 +134,7 @@
                 <a href="{% url 'home' %}" class="brand-logo">Учет часов учителя</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% if user.is_authenticated %}
+                        <li><a href="{% url 'pair-search' %}" class="white-text">Расчет</a></li>
                         <li><a class="white-text">Привет, {{ user.first_name }}{% if user.middle_name %} {{ user.middle_name }}{% endif %}!</a></li>
                         <li><a href="{% url 'logout' %}" class="waves-effect waves-light btn green-accent">Выйти</a></li>
                     {% else %}
