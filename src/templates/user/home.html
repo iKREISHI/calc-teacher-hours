@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m10 offset-m1 l8 offset-l2">
+        <div class="card z-depth-4">
+            <div class="card-content center-align">
+                <i class="large material-icons green-text">school</i>
+                <h4 class="card-title">Добро пожаловать{% if user.is_authenticated %}, {{ user.first_name|capfirst }}{% endif %}!</h4>
+
+                {% if user.is_authenticated %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <p class="flow-text">Вы успешно вошли в систему учета часов учителя.</p>
+                        <p><strong>ФИО:</strong> {{ user.last_name }} {{ user.first_name }}{% if user.middle_name %} {{ user.middle_name }}{% endif %}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+                    </div>
+                    <div class="section">
+                        <a href="{% url 'logout' %}" class="btn waves-effect waves-light red darken-1">
+                            Выйти
+                            <i class="material-icons right">exit_to_app</i>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <p class="flow-text">Пожалуйста, войдите в систему или зарегистрируйтесь.</p>
+                    </div>
+                    <div class="section">
+                        <a href="{% url 'login' %}" class="btn-large waves-effect waves-light green-bg">
+                            Войти
+                            <i class="material-icons right">account_circle</i>
+                        </a>
+                        <a href="{% url 'register' %}" class="btn-large waves-effect waves-light green-accent">
+                            Регистрация
+                            <i class="material-icons right">person_add</i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

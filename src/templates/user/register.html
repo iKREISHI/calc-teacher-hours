@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card z-depth-4 form-card">
+            <div class="card-content">
+                <h4 class="center-align section-title">Создать аккаунт</h4>
+
+                <form method="post" hx-post="{% url 'register' %}" hx-target="#register-form" hx-swap="outerHTML">
+                    {% csrf_token %}
+                    <div id="register-form">
+                        {% if form.non_field_errors %}
+                            <div class="card-panel red lighten-4 red-text text-darken-4">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">email</i>
+                            {{ form.email }}
+                            <label for="{{ form.email.id_for_label }}">Почта</label>
+                            {% if form.email.errors %}
+                                <div class="red-text">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">account_circle</i>
+                            {{ form.last_name }}
+                            <label for="{{ form.last_name.id_for_label }}">Фамилия</label>
+                            {% if form.last_name.errors %}
+                                <div class="red-text">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">face</i>
+                            {{ form.first_name }}
+                            <label for="{{ form.first_name.id_for_label }}">Имя</label>
+                            {% if form.first_name.errors %}
+                                <div class="red-text">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">people</i>
+                            {{ form.middle_name }}
+                            <label for="{{ form.middle_name.id_for_label }}">Отчество</label>
+                            {% if form.middle_name.errors %}
+                                <div class="red-text">{{ form.middle_name.errors }}</div>
+                            {% endif %}
+                            {% if form.middle_name.help_text %}
+                                <span class="helper-text">{{ form.middle_name.help_text }}</span>
+                            {% endif %}
+                        </div>
+
+{#                        <div class="input-field">#}
+{#                            <i class="material-icons prefix green-text">people</i>#}
+{#                            {{ form.middle_name }}#}
+{#                            <label for="{{ form.middle_name.id_for_label }}">Отчество</label>#}
+{#                            {% if form.middle_name.errors %}#}
+{#                                <div class="red-text">{{ form.middle_name.errors }}</div>#}
+{#                            {% endif %}#}
+{#                            {% if form.middle_name.help_text %}#}
+{#                                <span class="helper-text">{{ form.middle_name.help_text }}</span>#}
+{#                            {% endif %}#}
+{#                        </div>#}
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">lock</i>
+                            {{ form.password1 }}
+                            <label for="{{ form.password1.id_for_label }}">Пароль</label>
+                            {% if form.password1.errors %}
+                                <div class="red-text">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">lock_outline</i>
+                            {{ form.password2 }}
+                            <label for="{{ form.password2.id_for_label }}">Подтверждение пароля</label>
+                            {% if form.password2.errors %}
+                                <div class="red-text">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-action">
+                            <button type="submit" class="btn-large waves-effect waves-light green-bg">
+                                Зарегистрироваться
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-action auth-links">
+                <p class="center-align">Уже есть аккаунт?
+                    <a href="{% url 'login' %}" class="green-text text-darken-1">
+                        Войти
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

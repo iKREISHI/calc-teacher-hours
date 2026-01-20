@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Учет часов преподавателя ШГПУ{% endblock %}</title>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <style>
+        :root {
+            --primary-color: #008736;
+            --secondary-color: #4bb462;
+            --accent-color: #008736;
+            --background-color: #ffffff;
+            --text-color: #212121;
+            --gray-color: #9e9e9e;
+            --light-gray: #f5f5f5;
+        }
+
+        nav {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        body {
+            background-color: var(--light-gray);
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            color: var(--text-color);
+        }
+        main {
+            flex: 1 0 auto;
+            padding: 20px 0;
+        }
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .form-card {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .input-field label {
+            color: var(--primary-color);
+        }
+        .input-field input[type=text]:focus + label,
+        .input-field input[type=email]:focus + label,
+        .input-field input[type=password]:focus + label {
+            color: var(--primary-color);
+        }
+        .input-field input[type=text]:focus,
+        .input-field input[type=email]:focus,
+        .input-field input[type=password]:focus {
+            border-bottom: 1px solid var(--primary-color);
+            box-shadow: 0 1px 0 0 var(--primary-color);
+        }
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 4px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+        }
+        .btn-large {
+            height: 48px;
+            line-height: 48px;
+            width: 100%;
+        }
+        .section-title {
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            position: relative;
+            text-align: center;
+        }
+        .section-title:after {
+            background: var(--primary-color);
+            bottom: -10px;
+            content: '';
+            height: 3px;
+            left: 50%;
+            margin-left: -25px;
+            position: absolute;
+            width: 50px;
+        }
+        .card-action {
+            border-top: none !important;
+            padding: 1rem 0 0 !important;
+            text-align: center;
+        }
+        .auth-links {
+            margin-top: 1rem;
+        }
+        .toast {
+            border-radius: 4px;
+        }
+        .green-bg {
+            background-color: var(--primary-color);
+        }
+        .green-text {
+            color: var(--primary-color) !important;
+        }
+        .green-accent {
+            background-color: var(--secondary-color);
+        }
+        .gray-text {
+            color: var(--gray-color) !important;
+        }
+        .white-bg {
+            background-color: var(--background-color);
+        }
+        .brand-logo {
+            font-weight: bold;
+        }
+        .divider {
+            background-color: var(--gray-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="green-bg">
+            <div class="nav-wrapper container">
+                <a href="{% url 'home' %}" class="brand-logo">Учет часов учителя</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    {% if user.is_authenticated %}
+                        <li><a class="white-text">Привет, {{ user.first_name }}{% if user.middle_name %} {{ user.middle_name }}{% endif %}!</a></li>
+                        <li><a href="{% url 'logout' %}" class="waves-effect waves-light btn green-accent">Выйти</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}" class="waves-effect waves-light btn-flat white-text">Войти</a></li>
+                        <li><a href="{% url 'register' %}" class="waves-effect waves-light btn-flat white-text">Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="toast toast-{{ message.tags }}" data-message="{{ message }}" data-class="{{ message.tags }}"></div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="page-footer green-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Учет часов учителя</h5>
+                    <p class="grey-text text-lighten-4">Система для эффективного управления учебным временем преподавателей.</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Ссылки</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="{% url 'home' %}">Главная</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="grey-text text-lighten-3" href="{% url 'logout' %}">Выйти</a></li>
+                        {% else %}
+                            <li><a class="grey-text text-lighten-3" href="{% url 'login' %}">Войти</a></li>
+                            <li><a class="grey-text text-lighten-3" href="{% url 'register' %}">Регистрация</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2026 Технопарк УПК ШГПУ <a href="https://github.com/iKREISHI">iKREISHI</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Materialize components
+            M.AutoInit();
+
+            // Show toast messages
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                const message = toast.getAttribute('data-message');
+                const className = toast.getAttribute('data-class');
+                M.toast({html: message, classes: className});
+            });
+
+            // Initialize form validation
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value !== '') {
+                        this.classList.add('valid');
+                    } else {
+                        this.classList.remove('valid');
+                    }
+                });
+            });
+        });
+
+        // Function to handle HTMX responses
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.failed) {
+                // Handle failed requests
+                M.toast({html: 'Произошла ошибка', classes: 'red'});
+            }
+        });
+    </script>
+</body>
+</html>

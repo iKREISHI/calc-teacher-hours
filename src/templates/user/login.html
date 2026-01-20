@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card z-depth-4 form-card">
+            <div class="card-content">
+                <h4 class="center-align section-title">Вход в систему</h4>
+
+                <form method="post" hx-post="{% url 'login' %}" hx-target="#auth-form" hx-swap="outerHTML">
+                    {% csrf_token %}
+                    <div id="auth-form">
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">person</i>
+                            <input type="text" name="username" id="username" class="validate" required>
+                            <label for="username">Имя пользователя</label>
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix green-text">lock</i>
+                            <input type="password" name="password" id="password" class="validate" required>
+                            <label for="password">Пароль</label>
+                        </div>
+
+                        <div class="card-action">
+                            <button type="submit" class="btn-large waves-effect waves-light green-bg">
+                                Войти
+                                <i class="material-icons right">arrow_forward</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-action auth-links">
+                <p class="center-align">Нет аккаунта?
+                    <a href="{% url 'register' %}" class="green-text text-darken-1">
+                        Зарегистрируйтесь
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

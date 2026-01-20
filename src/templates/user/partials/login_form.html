@@ -1,0 +1,29 @@
+<form method="post" hx-post="{% url 'login' %}" hx-target="#auth-form" hx-swap="outerHTML">
+    {% csrf_token %}
+    <div id="auth-form">
+        {% if form_errors %}
+            <div class="card-panel red lighten-4 red-text text-darken-4">
+                {% for field, errors in form_errors.items %}
+                    {% for error in errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="input-field">
+            <i class="material-icons prefix green-text">person</i>
+            <input type="text" name="username" id="username" class="validate" required>
+            <label for="username">Имя пользователя</label>
+        </div>
+        <div class="input-field">
+            <i class="material-icons prefix green-text">lock</i>
+            <input type="password" name="password" id="password" class="validate" required>
+            <label for="password">Пароль</label>
+        </div>
+        <button type="submit" class="btn-large waves-effect waves-light green-bg">
+            Войти
+            <i class="material-icons right">arrow_forward</i>
+        </button>
+    </div>
+</form>
