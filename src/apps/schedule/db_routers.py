@@ -13,10 +13,16 @@ class PgReadOnlyRouter:
 
     def db_for_write(self, model, **hints):
         if model._meta.app_label in self.route_app_labels:
-            return None  # запретить запись
+            return "pg_ro"  # разрешить запись в pg_ro если нужно, иначе None для запрета
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return False  # никаких миграций для schedule
-        return None
+            if db == "pg_ro":
+                return True  # разрешить миграции для pg_ro
+            else:
+                return False  # запретить миграции для других БД
+        elif db == "default":
+            return True  # разрешить миграции для default
+        else:
+            return False  # запретить миграции для других БД

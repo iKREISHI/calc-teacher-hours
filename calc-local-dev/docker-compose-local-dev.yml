@@ -1,0 +1,28 @@
+services:
+  schedule_shspu_clone:
+    image: postgres:16
+    container_name: schedule_clone
+    environment:
+      POSTGRES_DB: schedule
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test123
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  main-db:
+    image: postgres:16
+    container_name: main-db
+    environment:
+      POSTGRES_DB: main-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data_main_db:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
+  pg_data_main_db:

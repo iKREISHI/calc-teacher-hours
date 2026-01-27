@@ -25,7 +25,19 @@ SECRET_KEY = 'django-insecure-z31z(iju1cqyxbxy)(h6iwuu!*!-*m5@mz0h_rq66#k8#65-^a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "tpbook.shgpi",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8080",
+    "http://tpbook.shgpi:8080",
+]
 
 # Application definition
 
@@ -49,7 +61,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -82,16 +93,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME', default='main-db'),
+        'USER': config('DB_USER', default='user'),
+        'PASSWORD': config('DB_PASSWORD', default='password123'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5433'),
     },
     "pg_ro": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config('DB_NAME', default='имя_базы'),
-        "USER": config('DB_USER', default='пользователь'),
-        "PASSWORD": config('DB_PASSWORD', default='пароль'),
-        "HOST": config('DB_HOST', default='localhost'),
-        "PORT": config('DB_PORT', default='5432'),
+        "NAME": config('DB_NAME_RO', default='schedule'),
+        "USER": config('DB_USER_RO', default='test'),
+        "PASSWORD": config('DB_PASSWORD_RO', default='test123'),
+        "HOST": config('DB_HOST_RO', default='localhost'),
+        "PORT": config('DB_PORT_RO', default='5435'),
         "OPTIONS": {
             "options": "-c search_path=public"
         }
