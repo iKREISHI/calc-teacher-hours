@@ -79,28 +79,28 @@
         {% if pairs %}
         <div class="card">
             <div class="card-content">
-                <table class="striped highlight">
+                <table class="striped highlight responsive-table">
                     <thead>
                         <tr>
-                            <th>Дата</th>
-                            <th>Часы от и до</th>
-                            <th>Вид выполняемой учебной работы</th>
-                            <th>Курс</th>
-                            <th>Группа</th>
-                            <th>Количество часов</th>
-                            <th>Примечание</th>
+                            <th class="date-col">Дата</th>
+                            <th class="time-col">Часы от и до</th>
+                            <th class="discipline-col">Дисциплина</th>
+                            <th class="work-type-col">Вид выполняемой учебной работы</th>
+                            <th class="course-col">Курс</th>
+                            <th class="group-col">Группа</th>
+                            <th class="hours-col">Количество часов</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for pair in pairs %}
                         <tr>
-                            <td>{{ pair.date|date:"d.m.Y" }}</td>
-                            <td>{{ pair.time_range }}</td>
-                            <td>{{ pair.work_type }}</td>
-                            <td>{{ pair.course }}</td>
-                            <td>{{ pair.group }}</td>
-                            <td>{{ pair.hours }}</td>
-                            <td>{{ pair.notes }}</td>
+                            <td class="date-col">{{ pair.date|date:"d.m.Y" }}</td>
+                            <td class="time-col">{{ pair.time_range }}</td>
+                            <td class="discipline-col">{{ pair.discipline }}</td>
+                            <td class="work-type-col">{{ pair.work_type }}</td>
+                            <td class="course-col">{{ pair.course }}</td>
+                            <td class="group-col">{{ pair.group }}</td>
+                            <td class="hours-col">{{ pair.hours }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -141,6 +141,152 @@
     }
     .form-card {
         overflow: visible;
+    }
+
+    /* Table column alignment */
+    .responsive-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .date-col {
+        width: 10%;
+    }
+
+    .time-col {
+        width: 12%;
+    }
+
+    .discipline-col {
+        width: 15%;
+    }
+
+    .work-type-col {
+        width: 20%;
+    }
+
+    .course-col {
+        width: 8%;
+    }
+
+    .group-col {
+        width: 15%;
+    }
+
+    .hours-col {
+        width: 10%;
+    }
+
+    /* Ensure text alignment */
+    .responsive-table th,
+    .responsive-table td {
+        text-align: left;
+        vertical-align: middle;
+        word-wrap: break-word;
+        padding: 12px 8px;
+    }
+
+    /* Center align numeric columns */
+    .hours-col {
+        text-align: center;
+    }
+
+    /* Adjust for medium and small screens */
+    @media screen and (max-width: 1200px) {
+        .work-type-col {
+            width: 18%;
+        }
+        .discipline-col {
+            width: 17%;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .responsive-table {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .date-col {
+            width: 15%;
+        }
+
+        .time-col {
+            width: 15%;
+        }
+
+        .discipline-col {
+            width: 20%;
+        }
+
+        .work-type-col {
+            width: 25%;
+        }
+
+        .course-col {
+            width: 10%;
+        }
+
+        .group-col {
+            width: 18%;
+        }
+
+        .hours-col {
+            width: 7%;
+        }
+    }
+
+    /* Extra small screens */
+    @media screen and (max-width: 768px) {
+        .responsive-table {
+            font-size: 0.85em;
+        }
+
+        .date-col,
+        .time-col,
+        .course-col,
+        .hours-col {
+            width: 12%;
+        }
+
+        .discipline-col,
+        .work-type-col,
+        .group-col {
+            width: 20%;
+        }
+
+        .responsive-table th,
+        .responsive-table td {
+            padding: 8px 4px;
+        }
+    }
+
+    /* Very small screens */
+    @media screen and (max-width: 576px) {
+        .responsive-table {
+            font-size: 0.8em;
+            display: block;
+            overflow-x: auto;
+        }
+
+        .date-col,
+        .time-col,
+        .course-col,
+        .hours-col {
+            width: 15%;
+        }
+
+        .discipline-col,
+        .work-type-col,
+        .group-col {
+            width: 20%;
+        }
+
+        .responsive-table th,
+        .responsive-table td {
+            padding: 6px 3px;
+            font-size: 0.9em;
+        }
     }
 </style>
 
