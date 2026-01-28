@@ -26,11 +26,9 @@ SECRET_KEY = 'django-insecure-z31z(iju1cqyxbxy)(h6iwuu!*!-*m5@mz0h_rq66#k8#65-^a
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "tpbook.shgpi",
-    "10.0.10.228"
+    '*'
 ]
+
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
