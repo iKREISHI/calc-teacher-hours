@@ -13,7 +13,7 @@
                 {% if user.is_authenticated %}
                     <div class="divider"></div>
                     <div class="section">
-                        <p class="flow-text">Вы успешно вошли в систему учета часов учителя.</p>
+                        <p class="flow-text">Вы успешно вошли в систему расчета часов преподавателя ШГПУ.</p>
                         <p><strong>ФИО:</strong> {{ user.last_name }} {{ user.first_name }}{% if user.middle_name %} {{ user.middle_name }}{% endif %}</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
                         <p><strong>Имя пользователя:</strong> {{ user.username }}</p>

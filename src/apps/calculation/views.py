@@ -107,7 +107,7 @@ class PairSearchView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Поиск занятий'
+        context['title'] = 'Расчет часов преподавателя ШГПУ'
         context.setdefault('search_performed', False)
         context.setdefault('pairs', [])
         form = context.get("form")
@@ -138,6 +138,7 @@ class PairSearchView(LoginRequiredMixin, FormView):
                 processed_pairs.append({
                     'date': pair.date,
                     'time_range': interpret_pair_num(pair.num),
+                    'discipline': pair.subject,
                     'work_type': interpret_work_type(pair.text),
                     'course': course,
                     'group': group.name,

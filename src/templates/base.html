@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Учет часов преподавателя ШГПУ{% endblock %}</title>
+    <title>{% block title %}Расчет часов преподавателя ШГПУ{% endblock %}</title>
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize CSS -->
@@ -131,7 +131,7 @@
     <header>
         <nav class="green-bg">
             <div class="nav-wrapper container">
-                <a href="{% url 'home' %}" class="brand-logo">Учет часов учителя</a>
+                <a href="{% url 'home' %}" class="brand-logo">Расчет часов преподавателя ШГПУ</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'pair-search' %}" class="white-text">Расчет</a></li>
@@ -163,7 +163,7 @@
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
-                    <h5 class="white-text">Учет часов учителя</h5>
+                    <h5 class="white-text">Расчет часов преподавателя ШГПУ</h5>
                     <p class="grey-text text-lighten-4">Система для эффективного управления учебным временем преподавателей.</p>
                 </div>
                 <div class="col l4 offset-l2 s12">
