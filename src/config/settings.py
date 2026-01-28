@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "tpbook.shgpi",
+    "10.0.10.228"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
